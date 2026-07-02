@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cotizador de cristales, perfiles y herrajes de Aluminio</title>
+    <style>
+     body {
+            background: #f0f0f0;
+            font-family: Arial, sans-serif;
+}
+        #cotizador {
+            width: 500px;
+            margin: 30px auto;
+}
+        #contenedor-dibujo {
+            margin-top: 20px;
+            padding: 50px;
+            border: 1px dashed #ccc;
+            display: inline-block;
+            background-color: #f9f9f9;
+}
+        #grupo-dibujo{
+            position: relative;
+            display: inline-block;
+}
+        #contenedor-dibujo{
+            position: relative;
+}
+        #cota-horizontal{
+            text-align:center;
+            margin-bottom:0px;
+            font-size:12px;
+}
+        #cota-vertical{
+            position:absolute;
+            left:-45px;
+            top:50%;
+            transform:translateY(-50%) rotate(-90deg);
+            font-size: 12px
+}
+        #dibujo-cristal {
+            background-color: rgba(175,238,238, 0.5);
+            border: 2px solid #6ECCB7;
+            width: 0px;
+            height: 0px;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+}
+        #linea-cota-h{
+           height: 1px;
+           background: black;
+           margin-bottom: 10px;
+} 
+        #linea-cota-v{
+           position: absolute;
+           width: 1px;
+           background: black;
+           left: -10px;
+           bottom: 0px;
+}       
+    </style>
+</head>
+<body>
+  <div id="cotizador"> 
+    <h2>Cotizador de Cristales </h2>
+    <p>
+        <label>Tipo de Cristal:</label><br>
+        <select id="Cristal" onchange="calcular()">
+            <option value="0"> Selecciona </option>
+            <option value="22000">Cristal Monolitico 4mm </option>
+            <option value="28000">Cristal Monolitico 5mm </option>
+            <option value="32000">Cristal Monolitico 6mm </option>
+            <option value="38000">Cristal Monolitico 8mm </option>
+            <option value="45000">Cristal Monolitico 10mm </option>
+            <option value="52000">Cristal Monolitico 12mm </option>
+            <option value="14000">Cristal Catedral Semilla 4mm </option>
+            <option value="35000">Cristal Saten 4mm </option>
+            <option value="38000">Cristal Saten 5mm </option>
+            <option value="36000">Espejo Belga pulido 4mm </option>
+            <option value="38000">Espejo Belga pulido 5mm </option>
+            <option value="36000">Espejo Lirquen pulido 4mm </option>
+            <option value="38000">Espejo Lirquen pulido 5mm </option>
+            <option value="38000">Cristal Templado 4mm </option>
+            <option value="40000">Cristal Templado 5mm </option>
+            <option value="45000">Cristal Templado 6mm </option>
+            <option value="55000">Cristal Templado 8mm </option>
+            <option value="62000">Cristal Templado 10mm </option>
+            <option value="68000">Cristal Templado 12mm </option>
+            <option value="45000">Cristal Fosco Templado 4mm </option>
+        </select>
+    </p>
+    <p>
+        <label>Ancho (en mm):</label><br>
+        <input type="number" id="ancho" oninput="calcular()" placeholder="Ej: 1200">
+    </p>
+    <p>
+        <label>Alto (en mm):</label><br>
+        <input type="number" id="alto" oninput="calcular()" placeholder="Ej: 1800">
+    </p>
+    <hr>
+    <p>Area: <span id="area">0</span>m2</p>
+    <h3>Precio Neto Estimado: <span id="neto">$0</span></h3> 
+    <button onclick="agregarCristal()">Agregar a la lista</button>
+    <table border="1" style="width:100%; margin-top:20px; border-collapse: collapse; text-align: center;">
+    <thead>
+        <tr style="background-color: #6ECCB7; color: white;">
+            <th>Cristal</th>
+            <th>Medidas</th>
+            <th>Área</th>
+            <th>Neto unitario</th>
+        </tr>
+    </thead>
+    <tbody id="tabla-resumen">
+        </tbody>
+</table>
+<div style="margin-top: 15px;">
+    <p>Subtotal Neto: <span id="neto-general">$0</span></p>
+    <p>IVA (19%): <span id="iva-general">$0</span></p>
+    <h4>Total Aproximado: <span id="total-general">$0</span></h4>
+</div>
+    <div id="contenedor-dibujo">
+        <p><strong>Vista previa:</strong></p>
+    <div id="grupo-dibujo">
+        <div id="cota-horizontal"></div>
+        <div id="linea-cota-h"></div>
+        <div id="dibujo-cristal"></div>
+        <div id="cota-vertical"></div>
+        <div id="linea-cota-v"></div>  
+    </div>
+    </div>
+    </div>    
+  <script>
+    var listadoVidrios=[]
+    function calcular() {
+        var precioM2 = parseFloat(document.getElementById('Cristal').value);
+        var anchoMM = parseFloat(document.getElementById('ancho').value) || 0;
+        var altoMM = parseFloat(document.getElementById('alto').value) || 0;
+        if (precioM2 === 0 || anchoMM === 0 || altoMM === 0) {
+            document.getElementById('neto').innerText = "$0";
+            return;
+        }
+        var anchoM = anchoMM / 1000;
+        var altoM = altoMM / 1000;
+        var areaM2 = anchoM*altoM;
+        var resultado = anchoM * altoM * precioM2;
+        document.getElementById('area').innerText= areaM2.toFixed(2);
+        document.getElementById('neto').innerText =
+    "$" + Math.round(resultado).toLocaleString('es-CL');  
+        document.getElementById('cota-horizontal').innerText =
+    anchoMM + " mm";
+        document.getElementById('cota-vertical').innerText =
+    altoMM + " mm";
+        document.getElementById('dibujo-cristal').style.width = (anchoMM*0.1)+"px";
+        document.getElementById('linea-cota-h').style.width =
+(anchoMM*0.1)+"px";
+        document.getElementById('dibujo-cristal').style.height = (altoMM*0.1)+"px";
+        document.getElementById('linea-cota-v').style.height =
+(altoMM*0.1)+"px";      
+    }
+    function agregarCristal() {
+      var selector = document.getElementById('Cristal');
+      var nombre = selector.options[selector.selectedIndex].text;
+      var ancho = document.getElementById('ancho').value;
+      var alto = document.getElementById('alto').value;
+      var area = document.getElementById('area').innerText;
+      var totalUnitarioText = document.getElementById('neto').innerText;
+      var totalUnitarioNum = parseFloat(totalUnitarioText.replace(/[^0-9]/g, '')) || 0;
+     if (totalUnitarioNum === 0) {
+        alert("Ingresa medidas y selecciona un cristal antes de agregarlo.");
+        return;
+    }
+      var vidrioNuevo = {
+        detalle: nombre,
+        dimensiones: ancho + "x" + alto + " mm",
+        superficie: area + " m2",
+        precio: totalUnitarioNum
+    }
+    listadoVidrios.push(vidrioNuevo);
+    actualizarTablaVisual();      
+    }
+    function actualizarTablaVisual() {
+    var cuerpoTabla = document.getElementById('tabla-resumen');
+    var HTMLacumulado = "";
+    var granTotalAcumulado = 0;
+    for (var i = 0; i < listadoVidrios.length; i++) {
+        var vidrio = listadoVidrios[i];
+        granTotalAcumulado += vidrio.precio; 
+        HTMLacumulado += "<tr>" +
+            "<td>" + vidrio.detalle + "</td>" +
+            "<td>" + vidrio.dimensiones + "</td>" +
+            "<td>" + vidrio.superficie + "</td>" +
+            "<td>$" + vidrio.precio.toLocaleString('es-CL') + "</td>" +
+        "</tr>";
+    }
+    cuerpoTabla.innerHTML = HTMLacumulado;
+    var netoGeneral = granTotalAcumulado;
+    var ivaGeneral = netoGeneral*0.19;
+    var totalgeneral= netoGeneral+ivaGeneral;   
+    document.getElementById('neto-general').innerText = "$" + Math.round(netoGeneral).toLocaleString('es-CL');
+    document.getElementById('iva-general').innerText = "$" + Math.round(ivaGeneral).toLocaleString('es-CL');
+    document.getElementById('total-general').innerText = "$" + Math.round(totalgeneral).toLocaleString('es-CL');
+}
+      </script>
+</body>
+</html> 
