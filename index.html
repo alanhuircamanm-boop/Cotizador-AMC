@@ -5,12 +5,16 @@
     <title>Cotizador de cristales, perfiles y herrajes de Aluminio</title>
     <style>
      body {
-            background: #f0f0f0;
+            background: #f0f0f0a1;
             font-family: Arial, sans-serif;
 }
         #cotizador {
-            width: 500px;
+            width: 600px;
             margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);      
 }
         #contenedor-dibujo {
             margin-top: 20px;
@@ -18,13 +22,11 @@
             border: 1px dashed #ccc;
             display: inline-block;
             background-color: #f9f9f9;
+            position: relative;
 }
         #grupo-dibujo{
             position: relative;
             display: inline-block;
-}
-        #contenedor-dibujo{
-            position: relative;
 }
         #cota-horizontal{
             text-align:center;
@@ -57,12 +59,41 @@
            background: black;
            left: -10px;
            bottom: 0px;
-}       
+}     
+        table {
+            background: white;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+}
+        #panel-superior {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+}
+        #datos {
+            flex: 1;
+}
+        #vista {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        #resumen-totales {
+            margin-top: 20px;
+            text-align: right;
+            padding: 10px;
+            border-top: 2px solid #397c2c;
+}
     </style>
 </head>
 <body>
   <div id="cotizador"> 
     <h2>Cotizador de Cristales </h2>
+    <div id="panel-superior">
+    <div id="datos">
     <p>
         <label>Tipo de Cristal:</label><br>
         <select id="Cristal" onchange="calcular()">
@@ -101,9 +132,27 @@
     <p>Area: <span id="area">0</span>m2</p>
     <h3>Precio Neto Estimado: <span id="neto">$0</span></h3> 
     <button onclick="agregarCristal()">Agregar a la lista</button>
+    </div>
+    <div id="vista">
+    <div id="contenedor-dibujo">
+        <p><strong>Vista previa:</strong></p>
+    <div id="grupo-dibujo">
+        <div id="cota-horizontal"></div>
+        <div id="linea-cota-h"></div>
+        <div id="dibujo-cristal"></div>
+        <div id="cota-vertical"></div>
+        <div id="linea-cota-v"></div> 
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
     <table border="1" style="width:100%; margin-top:20px; border-collapse: collapse; text-align: center;">
     <thead>
-        <tr style="background-color: #6ECCB7; color: white;">
+        <tr style="background-color: #397c2c; color: white;">
+            <th>N° cristal</th>
             <th>Cristal</th>
             <th>Medidas</th>
             <th>Área</th>
@@ -113,22 +162,11 @@
     <tbody id="tabla-resumen">
         </tbody>
 </table>
-<div style="margin-top: 15px;">
+<div id="resumen-totales">
     <p>Subtotal Neto: <span id="neto-general">$0</span></p>
     <p>IVA (19%): <span id="iva-general">$0</span></p>
     <h4>Total Aproximado: <span id="total-general">$0</span></h4>
-</div>
-    <div id="contenedor-dibujo">
-        <p><strong>Vista previa:</strong></p>
-    <div id="grupo-dibujo">
-        <div id="cota-horizontal"></div>
-        <div id="linea-cota-h"></div>
-        <div id="dibujo-cristal"></div>
-        <div id="cota-vertical"></div>
-        <div id="linea-cota-v"></div>  
-    </div>
-    </div>
-    </div>    
+</div>         
   <script>
     var listadoVidrios=[]
     function calcular() {
@@ -167,6 +205,9 @@
       var totalUnitarioNum = parseFloat(totalUnitarioText.replace(/[^0-9]/g, '')) || 0;
      if (totalUnitarioNum === 0) {
         alert("Ingresa medidas y selecciona un cristal antes de agregarlo.");
+        document.getElementById('ancho').value = "";
+        document.getElementById('alto').value = "";
+        document.getElementById('Cristal').selectedIndex = 0;
         return;
     }
       var vidrioNuevo = {
@@ -186,6 +227,7 @@
         var vidrio = listadoVidrios[i];
         granTotalAcumulado += vidrio.precio; 
         HTMLacumulado += "<tr>" +
+            "<td>" + (i + 1) + "</td>" +
             "<td>" + vidrio.detalle + "</td>" +
             "<td>" + vidrio.dimensiones + "</td>" +
             "<td>" + vidrio.superficie + "</td>" +
