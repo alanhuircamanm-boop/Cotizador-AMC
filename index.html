@@ -1,244 +1,1374 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Cotizador de cristales, perfiles y herrajes de Aluminio</title>
+    <title>Cotizador Carpintería de Aluminio & PVC</title>
     <style>
-     body {
-            background: #f0f0f0a1;
-            font-family: Arial, sans-serif;
-}
-        #cotizador {
-            width: 600px;
-            margin: 30px auto;
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);      
-}
-        #contenedor-dibujo {
-            margin-top: 20px;
-            padding: 50px;
-            border: 1px dashed #ccc;
-            display: inline-block;
-            background-color: #f9f9f9;
-            position: relative;
-}
-        #grupo-dibujo{
-            position: relative;
-            display: inline-block;
-}
-        #cota-horizontal{
-            text-align:center;
-            margin-bottom:0px;
-            font-size:12px;
-}
-        #cota-vertical{
-            position:absolute;
-            left:-45px;
-            top:50%;
-            transform:translateY(-50%) rotate(-90deg);
-            font-size: 12px
-}
-        #dibujo-cristal {
-            background-color: rgba(175,238,238, 0.5);
-            border: 2px solid #6ECCB7;
-            width: 0px;
-            height: 0px;
-            transition: all 0.2s ease;
-            box-sizing: border-box;
-}
-        #linea-cota-h{
-           height: 1px;
-           background: black;
-           margin-bottom: 10px;
-} 
-        #linea-cota-v{
-           position: absolute;
-           width: 1px;
-           background: black;
-           left: -10px;
-           bottom: 0px;
-}     
-        table {
-            background: white;
-            border-collapse: collapse;
+        :root {
+            --primary: #0284c7;
+            --primary-hover: #0369a1;
+            --bg-body: #f1f5f9;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning-bg: #fff7ed;
+            --warning-border: #ffedd5;
         }
-        th, td {
-            padding: 8px;
-            border: 1px solid #ddd;
-}
-        #panel-superior {
+
+
+        body {
+            background: var(--bg-body);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+        }
+
+
+        #cotizador {
+            max-width: 1420px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);      
+        }
+
+
+        /* NAVEGACIÓN PRINCIPAL */
+        .tabs-nav {
             display: flex;
+            gap: 6px;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 15px;
+        }
+
+
+        .tab-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            padding: 14px 22px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-muted);
+            border-radius: 10px 10px 0 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+
+        .tab-btn:hover { background: #e2e8f0; color: var(--text-dark); }
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+            border-color: var(--border-color);
+            border-bottom: 3px solid white;
+            margin-bottom: -2px;
+        }
+
+
+        .tab-content { display: none; animation: fadeIn 0.25s ease-in-out; }
+        .tab-content.active { display: block; }
+        .tab-content.visible { display:block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+
+        /* BARRA SUPERIOR DE SUB-PESTAÑAS DE ELEMENTOS */
+        #shelf-disenos {
+            background: #f8fafc;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+
+        .subtab-btn {
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.15s;
+        }
+
+
+        .subtab-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .subtab-btn.active { background: #e0f2fe; border-color: var(--primary); color: var(--primary); box-shadow: 0 2px 6px rgba(2,132,199,0.15); }
+        
+        .btn-add-subtab { background: #f1f5f9; color: var(--text-dark); border: 1px dashed var(--text-muted); font-weight: bold; padding: 8px 16px; border-radius: 8px; cursor: pointer; }
+        .btn-add-subtab:hover { background: #e2e8f0; border-color: var(--text-dark); }
+        
+        .btn-finalizar-etapa { background: var(--success); color: white; border: none; padding: 10px 20px; font-weight: 700; font-size: 14px; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+        .btn-finalizar-etapa:hover { background: #059669; }
+
+
+        /* GRIDS DE FORMULARIOS */
+        .grid-formulario {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
-            align-items: flex-start;
-}
-        #datos {
-            flex: 1;
-}
+            margin-bottom: 20px;
+        }
+
+
+        .grid-diseno {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+
+        .panel-control {
+            background: #f8fafc;
+            padding: 22px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+
+        .campo-grupo { margin-bottom: 18px; }
+        .campo-grupo label {
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+
+        .input-custom {
+            width: 100%;
+            padding: 10px 12px;
+            box-sizing: border-box;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            color: var(--text-dark);
+            background: white;
+            transition: border-color 0.2s;
+        }
+
+
+        .input-custom:focus { border-color: var(--primary); }
+        .input-custom:disabled { background: #e2e8f0; cursor: not-allowed; color: #94a3b8; }
+
+
+        .selector-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+
+        .card-option {
+            border: 2px solid var(--border-color);
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            background: white;
+            transition: all 0.15s;
+            user-select: none;
+        }
+
+
+        .card-option.selected {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #e0f2fe;
+        }
+
+
+        /* LIENZO TÉCNICO Y COTAS ARCHITECTÓNICAS */
         #vista {
-            flex: 1;
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            border-radius: 14px;
+            border: 2px dashed var(--border-color);
+            padding: 40px;
+            box-sizing: border-box;
+            position: relative;
+            min-height: 520px;
             justify-content: center;
         }
-        #resumen-totales {
-            margin-top: 20px;
+
+
+        #canvas-diseno {
+            position: relative;
+            padding-left: 90px; 
+            padding-top: 75px;  
+        }
+
+
+        #contenedor-cotas-W {
+            position: absolute;
+            top: 0;
+            left: 90px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+
+        #contenedor-cotas-H {
+            position: absolute;
+            top: 75px;
+            left: 0;
+            display: flex;
+            gap: 6px;
+        }
+
+
+        .fila-cota-total, .fila-cotas-parciales { display: flex; width: 100%; }
+        .columna-cota-total, .columna-cotas-parciales { display: flex; flex-direction: column; height: 100%; }
+
+
+        .caja-cota-tecnica {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+
+        .caja-cota-tecnica.total { background: #e2e8f0; border-color: #64748b; }
+
+
+        .input-cota-raw {
+            border: none;
+            background: transparent;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            color: var(--text-dark);
+            width: 100%;
+            height: 100%;
+            outline: none;
+        }
+
+
+        .vertical-text-input {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+        }
+
+
+        #dibujo-marco {
+            background-color: transparent;
+            border: 10px solid #334155;
+            box-sizing: border-box;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+
+        #dibujo-cristal {
+            background-color: rgba(186, 230, 253, 0.3);
+            width: 100%;
+            height: 100%;
+            display: grid;
+        }
+
+
+        .celda-cristal-pano {
+            position: relative;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            overflow: hidden;
+        }
+        .celda-cristal-pano:hover { background: rgba(2, 132, 199, 0.1); }
+
+
+        .badge-estado-pano {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 800;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            color: #334155;
+            pointer-events: none;
+        }
+        .badge-estado-pano.movil { color: var(--primary); border: 1px solid var(--primary); }
+
+
+        /* PESTAÑA 3: DESPIECE Y LISTADO */
+        .card-elemento-proyecto {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+
+        .header-card-elemento {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+
+        .grid-desglose-costos {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 25px;
+        }
+
+
+        .mini-tabla-insumos {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+
+        .mini-tabla-insumos th { background: #f1f5f9; color: var(--text-dark); font-weight: 700; padding: 10px; text-align: left; }
+        .mini-tabla-insumos td { padding: 10px; border-bottom: 1px solid #f1f5f9; }
+
+
+        .bloque-adicionales {
+            background: var(--warning-bg);
+            border: 1px solid var(--warning-border);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+
+        .bloque-subtotal-card {
             text-align: right;
-            padding: 10px;
-            border-top: 2px solid #397c2c;
-}
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary);
+            border-top: 2px dashed #cbd5e1;
+            padding-top: 12px;
+            margin-top: 12px;
+        }
+
+
+        .panel-gran-total {
+            background: #0f172a;
+            color: white;
+            padding: 25px 30px;
+            border-radius: 14px;
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+
+        /* PESTAÑA 4: FORMATO HOJA CARTA IMPRIMIBLE */
+        .contenedor-impresion { display: flex; justify-content: center; background: #64748b; padding: 30px; border-radius: 12px; }
+        .hoja-carta { width: 215.9mm; min-height: 279.4mm; background: white; padding: 20mm; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.25); font-size: 12px; }
+        .doc-header { display: flex; justify-content: space-between; border-bottom: 2px solid #0f172a; padding-bottom: 15px; margin-bottom: 20px; }
+        .doc-tabla-principal { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .doc-tabla-principal th { background: #334155; color: white; padding: 10px; font-size: 11px; text-transform: uppercase; text-align: left; }
+        .doc-tabla-principal td { border-bottom: 1px solid #cbd5e1; padding: 12px 10px; vertical-align: middle; }
+
+
+        .btn-accion { background: var(--primary); color: white; border: none; padding: 12px 24px; font-size: 14px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+        .btn-accion:hover { background: var(--primary-hover); }
+        .btn-secundario { background: #64748b; color: white; border: none; padding: 10px 18px; font-size: 13px; font-weight: 600; border-radius: 6px; cursor: pointer; }
+        .btn-secundario:hover { background: #475569; }
     </style>
 </head>
 <body>
-  <div id="cotizador"> 
-    <h2>Cotizador de Cristales </h2>
-    <div id="panel-superior">
-    <div id="datos">
-    <p>
-        <label>Tipo de Cristal:</label><br>
-        <select id="Cristal" onchange="calcular()">
-            <option value="0"> Selecciona </option>
-            <option value="22000">Cristal Monolitico 4mm </option>
-            <option value="28000">Cristal Monolitico 5mm </option>
-            <option value="32000">Cristal Monolitico 6mm </option>
-            <option value="38000">Cristal Monolitico 8mm </option>
-            <option value="45000">Cristal Monolitico 10mm </option>
-            <option value="52000">Cristal Monolitico 12mm </option>
-            <option value="14000">Cristal Catedral Semilla 4mm </option>
-            <option value="35000">Cristal Saten 4mm </option>
-            <option value="38000">Cristal Saten 5mm </option>
-            <option value="36000">Espejo Belga pulido 4mm </option>
-            <option value="38000">Espejo Belga pulido 5mm </option>
-            <option value="36000">Espejo Lirquen pulido 4mm </option>
-            <option value="38000">Espejo Lirquen pulido 5mm </option>
-            <option value="38000">Cristal Templado 4mm </option>
-            <option value="40000">Cristal Templado 5mm </option>
-            <option value="45000">Cristal Templado 6mm </option>
-            <option value="55000">Cristal Templado 8mm </option>
-            <option value="62000">Cristal Templado 10mm </option>
-            <option value="68000">Cristal Templado 12mm </option>
-            <option value="45000">Cristal Fosco Templado 4mm </option>
-        </select>
-    </p>
-    <p>
-        <label>Ancho (en mm):</label><br>
-        <input type="number" id="ancho" oninput="calcular()" placeholder="Ej: 1200">
-    </p>
-    <p>
-        <label>Alto (en mm):</label><br>
-        <input type="number" id="alto" oninput="calcular()" placeholder="Ej: 1800">
-    </p>
-    <hr>
-    <p>Area: <span id="area">0</span>m2</p>
-    <h3>Precio Neto Estimado: <span id="neto">$0</span></h3> 
-    <button onclick="agregarCristal()">Agregar a la lista</button>
+
+
+<div id="cotizador">
+    <div class="tabs-nav">
+        <button class="tab-btn active" id="btn-tab-1" onclick="switchTab(1)">1. Materiales y Cliente</button>
+        <button class="tab-btn" id="btn-tab-2" onclick="switchTab(2)">2. Diseño de elementos</button>
+        <button class="tab-btn" id="btn-tab-3" onclick="switchTab(3)">3. Despiece Técnico y Costos</button>
+        <button class="tab-btn" id="btn-tab-4" onclick="switchTab(4)">4. Cotización</button>
     </div>
-    <div id="vista">
-    <div id="contenedor-dibujo">
-        <p><strong>Vista previa:</strong></p>
-    <div id="grupo-dibujo">
-        <div id="cota-horizontal"></div>
-        <div id="linea-cota-h"></div>
-        <div id="dibujo-cristal"></div>
-        <div id="cota-vertical"></div>
-        <div id="linea-cota-v"></div> 
+
+
+    <div id="tab1" class="tab-content active">
+        <h2>Especificaciones Estructurales de Proyecto</h2>
+        <div class="grid-formulario">
+            <div class="campo-grupo">
+                <label>Nombre del Cliente</label>
+                <input type="text" id="cli-nombre" class="input-custom" value="Constructora Horizonte S.A.">
+            </div>
+            <div class="campo-grupo">
+                <label>Teléfono Celular</label>
+                <input type="text" id="cli-fono" class="input-custom" value="+56 9 7654 3210">
+            </div>
+            <div class="campo-grupo">
+                <label>Obra / Dirección</label>
+                <input type="text" id="cli-obra" class="input-custom" value="Av. Las Condes 12340, Piso 5">
+            </div>
+        </div>
+        <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 25px 0;">
+        
+        <div class="grid-formulario">
+            <div class="campo-grupo">
+                <label>Material de Los Perfiles</label>
+                <select id="mat-tipo" class="input-custom" onchange="cambiarEstructuraMaterial(); asignarGuardadoAutomatico();">
+                    <option value="aluminio">Aluminio</option>
+                    <option value="pvc">PVC</option>
+                </select>
+            </div>
+            <div class="campo-grupo">
+                <label>Línea de los Perfiles</label>
+                <select id="linea-perfil" class="input-custom" onchange="asignarGuardadoAutomatico()"></select>
+            </div>
+            <div class="campo-grupo">
+                <label>Color de los Perfiles</label>
+                <select id="acabado-perfil" class="input-custom" onchange="asignarGuardadoAutomatico()"></select>
+            </div>
+        </div>
+        
+        <div class="grid-formulario">
+            <div class="campo-grupo">
+                <label>Cristal</label>
+                <select id="cristal-tipo" class="input-custom" onchange="asignarGuardadoAutomatico()">
+                    <option value="22000">Monolítico Incoloro 6mm ($22.000/m²)</option>
+                    <option value="35000">Templado de Seguridad 6mm ($35.000/m²)</option>
+                    <option value="42000">Laminado Acústico 3+3mm ($42.000/m²)</option>
+                    <option value="42000">Aqui se van agregando desde ls BBBDD</option>
+                </select>
+            </div>
+        </div>
+
+
+        <div style="text-align: right; margin-top: 25px;">
+            <button class="btn-accion" onclick="switchTab(2)">Continuar al diseño de elementos →</button>
+        </div>
     </div>
+
+
+    <div id="tab2" class="tab-content">
+        <div id="shelf-disenos" style="padding: 10px 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 15px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <div id="contenedor-pills-diseno" style="display: flex; gap: 6px; flex-wrap: wrap;"></div>
+                    <button class="btn-add-subtab" onclick="crearNuevoVanoDesdeCero()">Agregar Otro Vano desde Cero</button>
+                    <button class="btn-add-subtab" style="color: var(--danger); border-color: var(--danger); background: #fef2f2;" onclick="eliminarVanoActual()">Eliminar Vano Seleccionado</button>
+        </div>
+                <div>
+                    <button class="btn-finalizar-etapa" onclick="asignarGuardadoAutomatico(); switchTab(3);">Finalizar Diseño e Ir a Costos →</button>
+                </div>
+            </div>
+        </div>
+        <div class="grid-diseno">
+            <div class="panel-control">
+                <div class="campo-grupo">
+                    <label>1. Tipología de Apertura</label>
+                    <div class="selector-cards">
+                        <div class="card-option" onclick="cambiarTipologia('fijo', this)">Paño Fijo</div>
+                        <div class="card-option selected" onclick="cambiarTipologia('corredera', this)">Corredera</div>
+                        <div class="card-option" onclick="cambiarTipologia('proyectante', this)">Proyectante</div>
+                        <div class="card-option" onclick="cambiarTipologia('abatir', this)">Abatible</div>
+                    </div>
+                    <input type="hidden" id="tipo-apertura" value="corredera">
+                </div>
+
+
+                <div class="campo-grupo">
+                    <label>2. Cuadrícula de Paños</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div>
+                            <span style="font-size:10px; color:var(--text-muted); font-weight:700;">FILAS</span>
+                            <input type="number" id="cant-filas" class="input-custom" min="1" max="3" value="1" oninput="cambioEstructuraGrid(); asignarGuardadoAutomatico();">
+                        </div>
+                        <div>
+                            <span style="font-size:10px; color:var(--text-muted); font-weight:700;">COLUMNAS</span>
+                            <input type="number" id="cant-columnas" class="input-custom" min="1" max="4" value="2" oninput="cambioEstructuraGrid(); asignarGuardadoAutomatico();">
+                        </div>
+                    </div>
+                    <span id="alerta-logica" style="color:var(--danger); font-size:11px; font-weight:bold; display:block; margin-top:6px;">⚠️ Correderas limitadas a máx. 3 paños horizontales.</span>
+                </div>
+
+
+                <div class="campo-grupo">
+                    <label>3. Identificador / Ubicación</label>
+                    <input type="text" id="item-etiqueta" class="input-custom" value="V1 (Living)" oninput="asignarGuardadoAutomatico(); actualizarNombreSubTabs();">
+                </div>
+
+
+                <div class="campo-grupo">
+                    <label>4. Cantidad de Unidades</label>
+                    <input type="number" id="item-cantidad" class="input-custom" min="1" value="1" oninput="asignarGuardadoAutomatico(); actualizarNombreSubTabs();">
+                </div>
+
+
+                <div style="font-size: 13px; background: #e2e8f0; padding: 12px; border-radius: 8px;">
+                    Superficie Vano: <strong><span id="area">1.80</span> m²</strong>
+                </div>
+            </div>
+
+
+            <div id="vista">
+                <div style="position: absolute; top: 15px; right: 20px; font-size: 11px; color: var(--text-muted); font-weight: 600;">
+                    El diseño se guarda automáticamente al editar cotas o cambiar rodamiento.
+                </div>
+
+
+                <div id="canvas-diseno">
+                    <div id="contenedor-cotas-W">
+                        <div class="fila-cota-total">
+                            <div class="caja-cota-tecnica total" id="box-w-total" style="height: 28px;">
+                                <input type="number" id="input-w-total" class="input-cota-raw" value="1500" oninput="actualizarCotaGlobal('W', this.value); asignarGuardadoAutomatico();">
+                            </div>
+                        </div>
+                        <div class="fila-cotas-parciales" id="bloque-cotas-columnas"></div>
+                    </div>
+                    
+                    <div id="contenedor-cotas-H">
+                        <div class="columna-cota-total">
+                            <div class="caja-cota-tecnica total" id="box-h-total" style="width: 45px;">
+                                <input type="number" id="input-h-total" class="input-cota-raw vertical-text-input" value="1200" oninput="actualizarCotaGlobal('H', this.value); asignarGuardadoAutomatico();">
+                            </div>
+                        </div>
+                        <div class="columna-cotas-parciales" id="bloque-cotas-filas"></div>
+                    </div>
+
+
+                    <div id="dibujo-marco">
+                        <div id="dibujo-cristal"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+
+    <div id="tab3" class="tab-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+            <h2>Desglose de Perfiles, Herrajes e Insumos</h2>
+            <button class="btn-secundario" onclick="switchTab(2)">← Volver al Modelador</button>
+        </div>
+        
+        <div id="contenedor-elementos-proyecto"></div>
+        
+        <div class="panel-gran-total" id="bloque-totales-globales" style="display: none;">
+            <div>
+                <span style="font-size: 14px; color:#cbd5e1;">Subtotal Neto General: <strong id="lbl-neto" style="color:white; font-size:16px;">$0</strong></span><br>
+                <span style="font-size: 14px; color:#cbd5e1;">IVA (19%): <strong id="lbl-iva" style="color:white; font-size:16px;">$0</strong></span>
+                <div style="font-size: 24px; font-weight: 800; margin-top: 6px; color:#38bdf8;">TOTAL COTIZACIÓN: <span id="lbl-total">$0 CLP</span></div>
+            </div>
+            <div>
+                <button class="btn-accion" style="background: #0ea5e9; padding: 16px 32px; font-size: 16px;" onclick="switchTab(4)">Generar Cotización</button>
+            </div>
+        </div>
     </div>
+    <div id="tab4" class="tab-content">
+        <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 15px;">
+            <h2>Vista Previa de la Cotización</h2>
+            <div>
+                <button class="btn-secundario" style="margin-right:10px;" onclick="switchTab(3)">← Ajustar Costos</button>
+                <button class="btn-secundario" style="background:#0f172a" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+            </div>
+        </div>
+        
+        <div class="contenedor-impresion">
+            <div class="hoja-carta" id="documento-imprimible">
+                <div class="doc-header">
+                    <div>
+                        <h3 style="margin:0; font-size:20px; color:#0f172a;">COTIZACIÓN TÉCNICA DE OBRA</h3>
+                        <span style="color:var(--text-muted); font-size:11px;">Especialidades en Aluminio y PVC</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <strong style="font-size:14px;">ALUMINIOS AMC Y CIA LTDA</strong><br>
+                        <span style="font-size:11px; color:var(--text-muted);">Santiago, Región Metropolitana, Chile</span>
+                    </div>
+                </div>
+
+
+                <div style="background:#f8fafc; padding:15px; border-radius:8px; border:1px solid #e2e8f0; display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom: 25px;">
+                    <div>
+                        <strong style="color:var(--text-muted); font-size:10px;">CLIENTE:</strong><br>
+                        <span id="doc-v-cliente" style="font-size:14px; font-weight:bold;">-</span><br>
+                        <strong style="color:var(--text-muted); font-size:10px;">PROYECTO / OBRA:</strong><br>
+                        <span id="doc-v-obra">-</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <strong style="color:var(--text-muted); font-size:10px;">CONTACTO COMERCIAL:</strong><br>
+                        <span id="doc-v-fono">-</span><br>
+                        <span style="font-size:11px; color:var(--text-muted);">Validez de Cotización: 15 días corridos</span>
+                    </div>
+                </div>
+
+
+                <table class="doc-tabla-principal">
+                    <thead>
+                        <tr>
+                            <th style="width: 6%">Item</th>
+                            <th style="width: 42%">Descripción e Insumos del Vano</th>
+                            <th style="width: 20%; text-align:center;">Esquema Geométrico</th>
+                            <th style="width: 12%; text-align:center;">Dimensiones</th>
+                            <th style="width: 6%; text-align:center;">Cant</th>
+                            <th style="width: 14%; text-align:right;">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="doc-cuerpo-tabla"></tbody>
+                </table>
+
+
+                <div style="margin-top: 35px; text-align: right; font-size: 14px; line-height: 1.8;">
+                    Neto Obra: <strong id="doc-neto" style="font-size:15px;">$0</strong><br>
+                    IVA (19%): <strong id="doc-iva" style="font-size:15px;">$0</strong><br>
+                    <div style="font-size: 18px; color:#0f172a; font-weight:900; border-top: 2px solid #0f172a; display:inline-block; padding-top:5px; margin-top:5px;">
+                        TOTAL COTIZACIÓN: <span id="doc-total">$0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <table border="1" style="width:100%; margin-top:20px; border-collapse: collapse; text-align: center;">
-    <thead>
-        <tr style="background-color: #397c2c; color: white;">
-            <th>N° cristal</th>
-            <th>Cristal</th>
-            <th>Medidas</th>
-            <th>Área</th>
-            <th>Neto unitario</th>
-        </tr>
-    </thead>
-    <tbody id="tabla-resumen">
-        </tbody>
-</table>
-<div id="resumen-totales">
-    <p>Subtotal Neto: <span id="neto-general">$0</span></p>
-    <p>IVA (19%): <span id="iva-general">$0</span></p>
-    <h4>Total Aproximado: <span id="total-general">$0</span></h4>
-</div>         
-  <script>
-    var listadoVidrios=[]
-    function calcular() {
-        var precioM2 = parseFloat(document.getElementById('Cristal').value);
-        var anchoMM = parseFloat(document.getElementById('ancho').value) || 0;
-        var altoMM = parseFloat(document.getElementById('alto').value) || 0;
-        if (precioM2 === 0 || anchoMM === 0 || altoMM === 0) {
-            document.getElementById('neto').innerText = "$0";
-            return;
+</div>
+
+
+<script>
+    var listadoEstructuras = [];
+    var indiceDiseñoActivo = 0;
+
+
+    // Dimensiones en lienzo actual
+    var anchosColumnas = [750, 750]; 
+    var altosFilas = [1200]; 
+    var aperturasPanos = {}; 
+
+
+    var dependenciasMaterial = {
+        aluminio: {
+            lineas: [
+                { text: "Línea Al25 (Corredera Tradicional)", value: "al25" },
+                { text: "Línea Xelentia (Cámara Europea Perimetral)", value: "xelentia" }
+            ],
+            colores: ["Mate", "Titanio", "Negro", "Blanco", "Madera"]
+        },
+        pvc: {
+            lineas: [
+                { text: "PVC Perfil Técnico 60mm Termoacústico", value: "pvc_60" }
+            ],
+            colores: ["Negro", "Blanco", "Madera"]
         }
-        var anchoM = anchoMM / 1000;
-        var altoM = altoMM / 1000;
-        var areaM2 = anchoM*altoM;
-        var resultado = anchoM * altoM * precioM2;
-        document.getElementById('area').innerText= areaM2.toFixed(2);
-        document.getElementById('neto').innerText =
-    "$" + Math.round(resultado).toLocaleString('es-CL');  
-        document.getElementById('cota-horizontal').innerText =
-    anchoMM + " mm";
-        document.getElementById('cota-vertical').innerText =
-    altoMM + " mm";
-        document.getElementById('dibujo-cristal').style.width = (anchoMM*0.1)+"px";
-        document.getElementById('linea-cota-h').style.width =
-(anchoMM*0.1)+"px";
-        document.getElementById('dibujo-cristal').style.height = (altoMM*0.1)+"px";
-        document.getElementById('linea-cota-v').style.height =
-(altoMM*0.1)+"px";      
+    };
+
+
+    function cambiarEstructuraMaterial() {
+        var mat = document.getElementById('mat-tipo').value;
+        var comboLinea = document.getElementById('linea-perfil');
+        var comboColor = document.getElementById('acabado-perfil');
+
+
+        comboLinea.innerHTML = dependenciasMaterial[mat].lineas.map(l => `<option value="${l.value}">${l.text}</option>`).join("");
+        comboColor.innerHTML = dependenciasMaterial[mat].colores.map(c => `<option value="${c.toLowerCase()}">${c}</option>`).join("");
     }
-    function agregarCristal() {
-      var selector = document.getElementById('Cristal');
-      var nombre = selector.options[selector.selectedIndex].text;
-      var ancho = document.getElementById('ancho').value;
-      var alto = document.getElementById('alto').value;
-      var area = document.getElementById('area').innerText;
-      var totalUnitarioText = document.getElementById('neto').innerText;
-      var totalUnitarioNum = parseFloat(totalUnitarioText.replace(/[^0-9]/g, '')) || 0;
-     if (totalUnitarioNum === 0) {
-        alert("Ingresa medidas y selecciona un cristal antes de agregarlo.");
-        document.getElementById('ancho').value = "";
-        document.getElementById('alto').value = "";
-        document.getElementById('Cristal').selectedIndex = 0;
+
+
+    function switchTab(numero) {
+        document.querySelectorAll('.tab-btn').forEach((btn, idx) => btn.classList.toggle('active', idx === (numero - 1)));
+        document.querySelectorAll('.tab-content').forEach((content, idx) => content.classList.toggle('active', idx === (numero - 1)));
+        
+        if(numero === 2) renderizarSubTabs();
+        if(numero === 3) renderizarPestañaCostos();
+        if(numero === 4) sincronizarDocumentoFinal();
+    }
+
+
+    function cambiarTipologia(valor, elemento) {
+        var siblings = elemento.parentNode.getElementsByClassName('card-option');
+        for(var i=0; i<siblings.length; i++) siblings[i].classList.remove('selected');
+        elemento.classList.add('selected');
+
+
+        document.getElementById('tipo-apertura').value = valor;
+        var inputCols = document.getElementById('cant-columnas');
+        var inputFilas = document.getElementById('cant-filas');
+        var alerta = document.getElementById('alerta-logica');
+
+
+        if(valor === 'corredera') {
+            inputFilas.value = 1;
+            inputFilas.disabled = true;
+            if(parseInt(inputCols.value) > 3) inputCols.value = 3;
+            alerta.style.display = "block";
+        } else {
+            inputFilas.disabled = false;
+            alerta.style.display = "none";
+        }
+
+
+        aperturasPanos = {};
+        cambioEstructuraGrid();
+        asignarGuardadoAutomatico();
+    }
+
+
+    function cambioEstructuraGrid() {
+        var filas = parseInt(document.getElementById('cant-filas').value) || 1;
+        var columnas = parseInt(document.getElementById('cant-columnas').value) || 1;
+        var maestro = document.getElementById('tipo-apertura').value;
+
+
+        if(maestro === 'corredera' && columnas > 3) {
+            columnas = 3;
+            document.getElementById('cant-columnas').value = 3;
+        }
+
+
+        var totalW = parseInt(document.getElementById('input-w-total').value) || 1500;
+        var totalH = parseInt(document.getElementById('input-h-total').value) || 1200;
+
+
+        var baseW = Math.floor(totalW / columnas);
+        anchosColumnas = Array(columnas).fill(baseW);
+        anchosColumnas[columnas - 1] += totalW - (baseW * columnas);
+
+
+        var baseH = Math.floor(totalH / filas);
+        altosFilas = Array(filas).fill(baseH);
+        altosFilas[filas - 1] += totalH - (baseH * filas);
+        
+        inyectarInputsEstructuralesDOM();
+        calcular();
+    }
+
+
+    function inyectarInputsEstructuralesDOM() {
+        var bCols = document.getElementById('bloque-cotas-columnas');
+        var bFilas = document.getElementById('bloque-cotas-filas');
+
+
+        if(anchosColumnas.length > 1) {
+            bCols.style.display = "flex";
+            bCols.innerHTML = anchosColumnas.map((_, i) => `
+                <div class="caja-cota-tecnica" style="height:26px; flex:1;">
+                    <input type="number" id="raw-input-col-${i}" class="input-cota-raw" oninput="manejadorCotaParcial('col', ${i}, this.value); asignarGuardadoAutomatico();">
+                </div>
+            `).join("");
+        } else {
+            bCols.style.display = "none";
+        }
+
+
+        if(altosFilas.length > 1) {
+            bFilas.style.display = "flex";
+            bFilas.innerHTML = altosFilas.map((_, j) => `
+                <div class="caja-cota-tecnica" id="contenedor-raw-fil-${j}" style="width:45px;">
+                    <input type="number" id="raw-input-fil-${j}" class="input-cota-raw vertical-text-input" oninput="manejadorCotaParcial('fil', ${j}, this.value); asignarGuardadoAutomatico();">
+                </div>
+            `).join("");
+        } else {
+            bFilas.style.display = "none";
+        }
+    }
+
+
+    function actualizarCotaGlobal(eje, valor) {
+        var valNum = parseInt(valor) || 0;
+        if(eje === 'W') {
+            var baseW = Math.floor(valNum / anchosColumnas.length);
+            anchosColumnas = anchosColumnas.map(() => baseW);
+            anchosColumnas[anchosColumnas.length - 1] += valNum - (baseW * anchosColumnas.length);
+        }
+        if(eje === 'H') {
+            var baseH = Math.floor(valNum / altosFilas.length);
+            altosFilas = altosFilas.map(() => baseH);
+            altosFilas[altosFilas.length - 1] += valNum - (baseH * altosFilas.length);
+        }
+        inyectarInputsEstructuralesDOM();
+        calcular();
+    }
+
+
+    function manejadorCotaParcial(tipo, index, valor) {
+        var valNum = parseInt(valor) || 0;
+
+
+        if (tipo === 'col') {
+            var totalW = parseInt(document.getElementById('input-w-total').value) || 1500;
+            var colAjuste = (index === anchosColumnas.length - 1) ? 0 : anchosColumnas.length - 1;
+            var sumaOtras = 0;
+            for(var i=0; i<anchosColumnas.length; i++) {
+                if(i !== index && i !== colAjuste) sumaOtras += anchosColumnas[i];
+            }
+            var maxPermitido = totalW - sumaOtras - 50;
+            valNum = Math.min(Math.max(50, valNum), maxPermitido);
+            anchosColumnas[index] = valNum;
+            anchosColumnas[colAjuste] = totalW - sumaOtras - valNum;
+        }
+
+
+        if (tipo === 'fil') {
+            var totalH = parseInt(document.getElementById('input-h-total').value) || 1200;
+            var filAjuste = (index === altosFilas.length - 1) ? 0 : altosFilas.length - 1;
+            var sumaOtrasH = 0;
+            for(var j=0; j<altosFilas.length; j++) {
+                if(j !== index && j !== filAjuste) sumaOtrasH += altosFilas[j];
+            }
+            var maxPermitidoH = totalH - sumaOtrasH - 50;
+            valNum = Math.min(Math.max(50, valNum), maxPermitidoH);
+            altosFilas[index] = valNum;
+            altosFilas[filAjuste] = totalH - sumaOtrasH - valNum;
+        }
+
+
+        sincronizarAtributosVisualesCanvas();
+    }
+
+
+    function sincronizarAtributosVisualesCanvas() {
+        var totalW = anchosColumnas.reduce((a,b)=>a+b, 0);
+        var totalH = altosFilas.reduce((a,b)=>a+b, 0);
+        var scale = 0.24;
+        
+        var widthPx = Math.min(totalW * scale, 480);
+        var heightPx = Math.min(totalH * scale, 420);
+
+
+        document.getElementById('box-w-total').style.width = widthPx + "px";
+        document.getElementById('box-h-total').style.height = heightPx + "px";
+
+
+        var bCols = document.getElementById('bloque-cotas-columnas');
+        if(anchosColumnas.length > 1) {
+            bCols.style.width = widthPx + "px";
+            bCols.style.gridTemplateColumns = anchosColumnas.map(w => `${w}fr`).join(" ");
+            anchosColumnas.forEach((w, i) => {
+                var el = document.getElementById(`raw-input-col-${i}`);
+                if(el && document.activeElement !== el) el.value = w;
+            });
+        }
+
+
+        var bFilas = document.getElementById('bloque-cotas-filas');
+        if(altosFilas.length > 1) {
+            bFilas.style.height = heightPx + "px";
+            altosFilas.forEach((h, j) => {
+                var contenedor = document.getElementById(`contenedor-raw-fil-${j}`);
+                if(contenedor) contenedor.style.height = ((h / totalH) * 100) + "%";
+                var el = document.getElementById(`raw-input-fil-${j}`);
+                if(el && document.activeElement !== el) el.value = h;
+            });
+        }
+
+
+        var marco = document.getElementById('dibujo-marco');
+        var cristalVisual = document.getElementById('dibujo-cristal');
+        marco.style.width = widthPx + "px";
+        marco.style.height = heightPx + "px";
+        cristalVisual.style.gridTemplateColumns = anchosColumnas.map(w => `${w}fr`).join(" ");
+        cristalVisual.style.gridTemplateRows = altosFilas.map(h => `${h}fr`).join(" ");
+
+
+        document.getElementById('area').innerText = ((totalW/1000) * (totalH/1000)).toFixed(2);
+    }
+
+
+    function calcular() {
+        sincronizarAtributosVisualesCanvas();
+        var filas = altosFilas.length;
+        var columnas = anchosColumnas.length;
+        var maestro = document.getElementById('tipo-apertura').value;
+        var cristalVisual = document.getElementById('dibujo-cristal');
+        
+        var contenidoHTML = "";
+        var colorApertura = "rgba(2, 132, 199, 0.85)";
+        var bordeInterno = "3px solid #334155";
+
+
+        for(var f=0; f<filas; f++) {
+            for(var c=0; c<columnas; c++) {
+                var key = `f${f}c${c}`;
+                
+                if(maestro === 'corredera') {
+                    if(columnas === 2) {
+                        if(!aperturasPanos['f0c0']) aperturasPanos['f0c0'] = 'fijo';
+                        if(!aperturasPanos['f0c1']) aperturasPanos['f0c1'] = 'movil-izq';
+                    } else if(columnas === 3) {
+                        if(!aperturasPanos['f0c0']) aperturasPanos['f0c0'] = 'movil-der';
+                        if(!aperturasPanos['f0c1']) aperturasPanos['f0c1'] = 'fijo';
+                        if(!aperturasPanos['f0c2']) aperturasPanos['f0c2'] = 'movil-izq';
+                    }
+                } else if(!aperturasPanos[key]) {
+                    aperturasPanos[key] = (maestro === 'fijo') ? 'fijo' : 'movil-act';
+                }
+
+
+                var est = aperturasPanos[key];
+                var styleCelda = "position:relative; box-sizing:border-box; display:flex; justify-content:center; align-items:center; overflow:hidden;";
+                if(c < columnas - 1) styleCelda += `border-right:${bordeInterno};`;
+                if(f < filas - 1) styleCelda += `border-bottom:${bordeInterno};`;
+
+
+                contenidoHTML += `<div class="celda-cristal-pano" style='${styleCelda}' onclick="alternarAperturaPaño('${key}', '${maestro}', ${c}, ${columnas})">`;
+
+
+                if (est !== "fijo") {
+                    if (maestro === "proyectante") {
+                        contenidoHTML += `<svg width='100%' height='100%' style='position:absolute;'><line x1='0' y1='0' x2='50%' y2='100%' stroke='${colorApertura}' stroke-width='2.5' stroke-dasharray='5,4'/><line x1='100%' y1='0' x2='50%' y2='100%' stroke='${colorApertura}' stroke-width='2.5' stroke-dasha
+                    } else if (maestro === "abatir") {
+                        contenidoHTML += `<svg width='100%' height='100%' style='position:absolute;'><line x1='0' y1='0' x2='100%' y2='50%' stroke='${colorApertura}' stroke-width='2.5' stroke-dasharray='5,4'/><line x1='0' y1='100%' x2='100%' y2='50%' stroke='${colorApertura}' stroke-width='2.5' stroke-dasha
+                    }
+                }
+
+
+                var txtBadge = (est === "fijo") ? "🔒 FIJO" : (est === "movil-izq" ? "← MÓVIL" : (est === "movil-der" ? "MÓVIL →" : "📐 ABRE"));
+                var claseBadge = (est === "fijo") ? "" : "movil";
+                contenidoHTML += `<div class="badge-estado-pano ${claseBadge}">${txtBadge}</div></div>`;
+            }
+        }
+        cristalVisual.innerHTML = contenidoHTML;
+    }
+
+
+    function alternarAperturaPaño(key, maestro, colIndex, totalCols) {
+        if (maestro === 'fijo') return;
+        var actual = aperturasPanos[key] || "fijo";
+
+
+        if (maestro === 'corredera') {
+            if(totalCols === 2) {
+                if(colIndex === 0) aperturasPanos[key] = (actual === "fijo") ? "movil-der" : "fijo";
+                if(colIndex === 1) aperturasPanos[key] = (actual === "fijo") ? "movil-izq" : "fijo";
+            } else if(totalCols === 3) {
+                if(colIndex === 0) aperturasPanos[key] = (actual === "fijo") ? "movil-der" : "fijo";
+                if(colIndex === 1) aperturasPanos[key] = (actual === "fijo") ? "movil-izq" : (actual === "movil-izq" ? "movil-der" : "fijo");
+                if(colIndex === 2) aperturasPanos[key] = (actual === "fijo") ? "movil-izq" : "fijo";
+            }
+        } else {
+            aperturasPanos[key] = (actual === "fijo") ? "movil-act" : "fijo";
+        }
+        calcular();
+        asignarGuardadoAutomatico();
+    }
+
+
+    /* =========================================================
+       NUEVO MOTOR DE SUB-PESTAÑAS (GUARDADO AUTOMÁTICO ACTIVO)
+       ========================================================= */
+    function crearNuevoVanoDesdeCero() {
+        // Asegurar persistencia del elemento anterior
+        asignarGuardadoAutomatico();
+        
+        var sigIndice = listadoEstructuras.length + 1;
+        var nuevoVanoVacio = {
+            etiqueta: `V${sigIndice} (Nuevo Vano)`,
+            tipo: 'CORREDERA',
+            material: document.getElementById('mat-tipo').value.toUpperCase(),
+            linea: document.getElementById('linea-perfil').options[document.getElementById('linea-perfil').selectedIndex]?.text || "Línea Estructural",
+            acabado: document.getElementById('acabado-perfil').options[document.getElementById('acabado-perfil').selectedIndex]?.text || "Base",
+            cristal: document.getElementById('cristal-tipo').options[document.getElementById('cristal-tipo').selectedIndex]?.text || "Base",
+            vano: "1500 x 1200 mm",
+            cantidad: 1,
+            anchos: [750, 750],
+            altos: [1200],
+            aperturas: { 'f0c0': 'fijo', 'f0c1': 'movil-izq' },
+            costosBBDD: { vidrio: 0, perfiles: 0, accesorios: 0 },
+            adicionales: { insumos: 0, logistica: 0 },
+            precioVentaUnitarioBase: 0
+        };
+
+
+        listadoEstructuras.push(nuevoVanoVacio);
+        indiceDiseñoActivo = listadoEstructuras.length - 1;
+        
+        cargarEstructuraSubTabEnPantalla(indiceDiseñoActivo);
+    }
+
+
+    function renderizarSubTabs() {
+        var contenedor = document.getElementById('contenedor-pills-diseno');
+        if(listadoEstructuras.length === 0) return;
+
+
+        contenedor.innerHTML = listadoEstructuras.map((item, idx) => `
+            <button class="subtab-btn ${idx === indiceDiseñoActivo ? 'active' : ''}" onclick="cambiarDeSubTab(${idx})">
+                <span>${item.etiqueta}</span>
+            </button>
+        `).join("");
+    }
+
+
+    function cambiarDeSubTab(nuevoIdx) {
+        asignarGuardadoAutomatico(); // Guarda la actual antes de migrar
+        cargarEstructuraSubTabEnPantalla(nuevoIdx);
+    }
+
+
+    function cargarEstructuraSubTabEnPantalla(idx) {
+        indiceDiseñoActivo = idx;
+        var item = listadoEstructuras[idx];
+
+
+        document.getElementById('item-etiqueta').value = item.etiqueta;
+        document.getElementById('item-cantidad').value = item.cantidad;
+        document.getElementById('input-w-total').value = item.anchos.reduce((a,b)=>a+b, 0);
+        document.getElementById('input-h-total').value = item.altos.reduce((a,b)=>a+b, 0);
+        document.getElementById('cant-filas').value = item.altos.length;
+        document.getElementById('cant-columnas').value = item.anchos.length;
+
+
+        anchosColumnas = [...item.anchos];
+        altosFilas = [...item.altos];
+        aperturasPanos = JSON.parse(JSON.stringify(item.aperturas));
+
+
+        var tipo = item.tipo.toLowerCase();
+        var idxOpt = tipo === 'fijo' ? 0 : (tipo === 'corredera' ? 1 : (tipo === 'proyectante' ? 2 : 3));
+        var optEl = document.querySelectorAll('.card-option')[idxOpt];
+        
+        // Seleccionar tarjeta correcta en la UI
+        var cards = document.querySelectorAll('.card-option');
+        for(var i=0; i<cards.length; i++) cards[i].classList.remove('selected');
+        optEl.classList.add('selected');
+        document.getElementById('tipo-apertura').value = tipo;
+
+
+        if(tipo === 'corredera') {
+            document.getElementById('cant-filas').disabled = true;
+            document.getElementById('alerta-logica').style.display = "block";
+        } else {
+            document.getElementById('cant-filas').disabled = false;
+            document.getElementById('alerta-logica').style.display = "none";
+        }
+
+
+        inyectarInputsEstructuralesDOM();
+        calcular();
+        renderizarSubTabs();
+    }
+
+
+    function eliminarVanoActual() {
+    if (listadoEstructuras.length <= 1) {
+        alert("No puedes eliminar todos los elementos.");
         return;
     }
-      var vidrioNuevo = {
-        detalle: nombre,
-        dimensiones: ancho + "x" + alto + " mm",
-        superficie: area + " m2",
-        precio: totalUnitarioNum
+    if (confirm(`¿Estás seguro de que deseas eliminar el elemento "${listadoEstructuras[indiceDiseñoActivo].etiqueta}"?`)) {
+        // Eliminar el elemento del arreglo de memoria
+        listadoEstructuras.splice(indiceDiseñoActivo, 1);
+        
+        // Reajustar el índice activo para que no quede apuntando a la nada
+        if (indiceDiseñoActivo >= listadoEstructuras.length) {
+            indiceDiseñoActivo = listadoEstructuras.length - 1;
+        }
+        
+        // Cargar el vano vecino que quedó activo
+        cargarEstructuraSubTabEnPantalla(indiceDiseñoActivo);
     }
-    listadoVidrios.push(vidrioNuevo);
-    actualizarTablaVisual();      
-    }
-    function actualizarTablaVisual() {
-    var cuerpoTabla = document.getElementById('tabla-resumen');
-    var HTMLacumulado = "";
-    var granTotalAcumulado = 0;
-    for (var i = 0; i < listadoVidrios.length; i++) {
-        var vidrio = listadoVidrios[i];
-        granTotalAcumulado += vidrio.precio; 
-        HTMLacumulado += "<tr>" +
-            "<td>" + (i + 1) + "</td>" +
-            "<td>" + vidrio.detalle + "</td>" +
-            "<td>" + vidrio.dimensiones + "</td>" +
-            "<td>" + vidrio.superficie + "</td>" +
-            "<td>$" + vidrio.precio.toLocaleString('es-CL') + "</td>" +
-        "</tr>";
-    }
-    cuerpoTabla.innerHTML = HTMLacumulado;
-    var netoGeneral = granTotalAcumulado;
-    var ivaGeneral = netoGeneral*0.19;
-    var totalgeneral= netoGeneral+ivaGeneral;   
-    document.getElementById('neto-general').innerText = "$" + Math.round(netoGeneral).toLocaleString('es-CL');
-    document.getElementById('iva-general').innerText = "$" + Math.round(ivaGeneral).toLocaleString('es-CL');
-    document.getElementById('total-general').innerText = "$" + Math.round(totalgeneral).toLocaleString('es-CL');
 }
-      </script>
+    function actualizarNombreSubTabs() {
+        if(indiceDiseñoActivo < 0) return;
+        listadoEstructuras[indiceDiseñoActivo].etiqueta = document.getElementById('item-etiqueta').value || `V${indiceDiseñoActivo+1}`;
+        listadoEstructuras[indiceDiseñoActivo].cantidad = parseInt(document.getElementById('item-cantidad').value) || 1;
+        renderizarSubTabs();
+    }
+
+
+    // Persistencia transparente en el Backend sin botones intermedios
+    function asignarGuardadoAutomatico() {
+        if(indiceDiseñoActivo < 0) return;
+
+
+        var maestro = document.getElementById('tipo-apertura').value;
+        var cristalSelect = document.getElementById('cristal-tipo');
+        var matSelect = document.getElementById('mat-tipo').value;
+        var lineaSelect = document.getElementById('linea-perfil');
+        var acabadoSelect = document.getElementById('acabado-perfil');
+        
+        var totalW = anchosColumnas.reduce((a,b)=>a+b, 0);
+        var totalH = altosFilas.reduce((a,b)=>a+b, 0);
+        var cant = parseInt(document.getElementById('item-cantidad').value) || 1;
+        var etiqueta = document.getElementById('item-etiqueta').value || `V${indiceDiseñoActivo+1}`;
+
+
+        var costM2Cristal = parseFloat(cristalSelect.value);
+        var areaM2 = (totalW/1000) * (totalH/1000);
+        
+        var costoVidrio = areaM2 * costM2Cristal;
+        var mlPerfiles = ((totalW * 2) + (totalH * 2)) / 1000;
+        var costoPerfiles = mlPerfiles * (matSelect === 'pvc' ? 5800 : 5200);
+        var costoAccesorios = (maestro === 'corredera') ? 18000 : 11000;
+
+
+        var cargosAdicionalesPrevios = listadoEstructuras[indiceDiseñoActivo]?.adicionales || { insumos: 0, logistica: 0 };
+
+
+        listadoEstructuras[indiceDiseñoActivo] = {
+            etiqueta: etiqueta,
+            tipo: maestro.toUpperCase(),
+            material: matSelect.toUpperCase(),
+            linea: lineaSelect.options[lineaSelect.selectedIndex]?.text || "Línea Estructural",
+            acabado: acabadoSelect.options[acabadoSelect.selectedIndex]?.text || "Estándar",
+            cristal: cristalSelect.options[cristalSelect.selectedIndex]?.text || "Incoloro",
+            vano: `${totalW} x ${totalH} mm`,
+            cantidad: cant,
+            anchos: [...anchosColumnas],
+            altos: [...altosFilas],
+            aperturas: JSON.parse(JSON.stringify(aperturasPanos)),
+            costosBBDD: { vidrio: Math.ceil(costoVidrio), perfiles: Math.ceil(costoPerfiles), accesorios: Math.ceil(costoAccesorios) },
+            adicionales: cargosAdicionalesPrevios,
+            precioVentaUnitarioBase: Math.ceil((costoVidrio + costoPerfiles + costoAccesorios) * 1.45)
+        };
+    }
+
+
+
+
+    /* =========================================================
+       PESTAÑA 3: RENDER Y ARREGLO DE CÁLCULO DE SUMATORIAS
+       ========================================================= */
+    function actualizarAdicional(idx, campo, valor) {
+        var valNum = parseInt(valor) || 0;
+        
+        // Registrar directo en memoria del objeto
+        listadoEstructuras[idx].adicionales[campo] = valNum;
+        
+        var item = listadoEstructuras[idx];
+        
+        // Sumar correctamente los adicionales al subtotal unitario
+        var subtotalUnitarioReal = item.precioVentaUnitarioBase + item.adicionales.insumos + item.adicionales.logistica;
+        var totalElementoAcumulado = subtotalUnitarioReal * item.cantidad;
+        
+        // Inyección dirigida en la tarjeta sin perder el foco del input
+        document.getElementById(`lbl-subtotal-item-${idx}`).innerText = "$" + totalElementoAcumulado.toLocaleString('es-CL');
+        document.getElementById(`lbl-ajustes-muestra-${idx}`).innerText = "$" + (item.adicionales.insumos + item.adicionales.logistica).toLocaleString('es-CL');
+        
+        calcularEstructuraGranTotalGlobal();
+    }
+
+
+    function renderizarPestañaCostos() {
+        var contenedor = document.getElementById('contenedor-elementos-proyecto');
+        if(listadoEstructuras.length === 0) {
+            contenedor.innerHTML = `<div style="background:white; border:2px dashed var(--border-color); border-radius:12px; color: var(--text-muted); text-align: center; padding: 50px;">Ningún vano registrado en el proyecto.</div>`;
+            document.getElementById('bloque-totales-globales').style.display = "none";
+            return;
+        }
+
+
+        contenedor.innerHTML = listadoEstructuras.map((item, idx) => {
+            var subtotalUnitario = item.precioVentaUnitarioBase + item.adicionales.insumos + item.adicionales.logistica;
+            return `
+                <div class="card-elemento-proyecto">
+                    <div class="header-card-elemento">
+                        <div>
+                            <strong style="font-size:18px; color:var(--primary);">0${idx+1}. ${item.etiqueta} — ${item.tipo} (${item.material})</strong><br>
+                            <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Configuración: ${item.linea} | Acabado: ${item.acabado}</span>
+                        </div>
+                        <div style="text-align:right;">
+                            <span style="font-size:11px; color:var(--text-muted); font-weight:700;">DIMENSIÓN REAL</span><br>
+                            <strong style="font-size:16px; color:#0f172a;">${item.vano}</strong>
+                        </div>
+                    </div>
+                    <div class="grid-desglose-costos">
+                        <div>
+                            <span style="font-size:11px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:6px;">DESGLOSE DE INSUMOS TÉCNICOS (VALORES BASE VALIDADOS)</span>
+                            <table class="mini-tabla-insumos">
+                                <thead><tr><th>Insumo y Especificación</th><th>Cantidad</th><th>Unidad</th><th>Costo Base BBDD</th></tr></thead>
+                                <tbody>
+                                    <tr><td><strong>Cristal Dimensionado:</strong> ${item.cristal}</td><td>1</td><td>Vano</td><td>$${item.costosBBDD.vidrio.toLocaleString('es-CL')}</td></tr>
+                                    <tr><td><strong>Extrusión Perfilería:</strong> Marcos, hojas y junquillos</td><td>1</td><td>Perímetro</td><td>$${item.costosBBDD.perfiles.toLocaleString('es-CL')}</td></tr>
+                                    <tr><td><strong>Herrajes y Rodamientos:</strong> Cierres, escuadras y felpas</td><td>1</td><td>Kit Vano</td><td>$${item.costosBBDD.accesorios.toLocaleString('es-CL')}</td></tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="bloque-adicionales">
+                                <span style="font-size:11px; font-weight:800; color:#c2410c; display:block; margin-bottom:8px;">🛠️ CARGOS ADICIONALES DE OBRA (RECALCULO EN TIEMPO REAL)</span>
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                                    <div>
+                                        <span style="font-size:11px; font-weight:600; color:var(--text-dark);">Siliconas / Sellos Extras ($)</span>
+                                        <input type="number" class="input-custom" style="padding:8px; margin-top:4px;" value="${item.adicionales.insumos}" oninput="actualizarAdicional(${idx}, 'insumos', this.value)">
+                                    </div>
+                                    <div>
+                                        <span style="font-size:11px; font-weight:600; color:var(--text-dark);">Tarifas / Horarios Especiales ($)</span>
+                                        <input type="number" class="input-custom" style="padding:8px; margin-top:4px;" value="${item.adicionales.logistica}" oninput="actualizarAdicional(${idx}, 'logistica', this.value)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="background:white; padding:22px; border-radius:10px; border:1px solid #e2e8f0; display:flex; flex-direction:column; justify-content:center; text-align:right;">
+                            <span style="font-size:11px; font-weight:800; color:var(--text-muted); letter-spacing:0.5px;">RESUMEN VENTA UNITARIO</span>
+                            <div style="font-size:13px; margin-top:12px; color:var(--text-muted);">Valor Técnico Base: <strong style="color:var(--text-dark);">$${item.precioVentaUnitarioBase.toLocaleString('es-CL')}</strong></div>
+                            <div style="font-size:13px; margin-top:4px; color:#c2410c;">Ajustes Adicionales: <strong id="lbl-ajustes-muestra-${idx}">$${(item.adicionales.insumos + item.adicionales.logistica).toLocaleString('es-CL')}</strong></div>
+                            <div style="font-size:15px; margin-top:12px; font-weight:800; background:#f1f5f9; padding:8px; border-radius:6px; text-align:center;">Cantidad Obra: ${item.cantidad} Unidades</div>
+                            <span style="font-size:11px; color:var(--text-muted); margin-top:15px;">SUBTOTAL ELEMENTO:</span>
+                            <div class="bloque-subtotal-card" id="lbl-subtotal-item-${idx}">$${(subtotalUnitario * item.cantidad).toLocaleString('es-CL')}</div>
+                        </div>
+                    </div>
+                </div>`;
+        }).join("");
+
+
+        document.getElementById('bloque-totales-globales').style.display = "flex";
+        calcularEstructuraGranTotalGlobal();
+    }
+
+
+    function calcularEstructuraGranTotalGlobal() {
+        var neto = listadoEstructuras.reduce((acc, item) => {
+            var unitario = item.precioVentaUnitarioBase + (parseInt(item.adicionales.insumos) || 0) + (parseInt(item.adicionales.logistica) || 0);
+            return acc + (unitario * item.cantidad);
+        }, 0);
+
+
+        var iva = Math.ceil(neto * 0.19);
+        var total = neto + iva;
+
+
+        document.getElementById('lbl-neto').innerText = "$" + neto.toLocaleString('es-CL');
+        document.getElementById('lbl-iva').innerText = "$" + iva.toLocaleString('es-CL');
+        document.getElementById('lbl-total').innerText = "$" + total.toLocaleString('es-CL') + " CLP";
+    }
+
+
+
+
+    /* =========================================================
+       PESTAÑA 4: RENDERIZACIÓN CON MINI-PLANO TÉCNICO GRÁFICO
+       ========================================================= */
+    function generarMiniEsquemaHTML(item) {
+        var totalW = item.anchos.reduce((a,b)=>a+b, 0);
+        var totalH = item.altos.reduce((a,b)=>a+b, 0);
+        
+        var colsTemplate = item.anchos.map(w => `${w}fr`).join(" ");
+        var rowsTemplate = item.altos.map(h => `${h}fr`).join(" ");
+        
+        var html = `
+        <div style="display: flex; flex-direction: column; align-items: center; font-family: monospace; margin: 4px 0;">
+            <div style="border: 2px solid #1e293b; background: #f0f9ff; display: grid; grid-template-columns: ${colsTemplate}; grid-template-rows: ${rowsTemplate}; width: 95px; height: 70px; position: relative; box-sizing: border-box;">
+        `;
+        
+        for(var f=0; f<item.altos.length; f++) {
+            for(var c=0; c<item.anchos.length; c++) {
+                var key = `f${f}c${c}`;
+                var est = item.aperturas[key] || 'fijo';
+                var symbol = "🔒";
+                if (est === 'movil-izq') symbol = "←";
+                if (est === 'movil-der') symbol = "→";
+                if (est === 'movil-act') symbol = "📐";
+                
+                var cellStyle = "border: 1px dashed #94a3b8; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; color: #0284c7; box-sizing: border-box; position:relative;";
+                html += `<div style="${cellStyle}">${symbol}</div>`;
+            }
+        }
+        
+        html += `
+            </div>
+            <div style="font-size: 9px; color: #475569; font-weight: 800; margin-top: 3px;">
+                ${totalW}x${totalH} mm
+            </div>
+        </div>`;
+        return html;
+    }
+
+
+    function sincronizarDocumentoFinal() {
+        document.getElementById('doc-v-cliente').innerText = document.getElementById('cli-nombre').value;
+        document.getElementById('doc-v-fono').innerText = document.getElementById('cli-fono').value;
+        document.getElementById('doc-v-obra').innerText = document.getElementById('cli-obra').value;
+
+
+        var cuerpo = document.getElementById('doc-cuerpo-tabla');
+        if(listadoEstructuras.length === 0) {
+            cuerpo.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:40px;">Ningún vano registrado en la obra.</td></tr>`;
+            return;
+        }
+
+
+        var netoGeneral = 0;
+        cuerpo.innerHTML = listadoEstructuras.map((item, idx) => {
+            var valorUnitarioFinal = item.precioVentaUnitarioBase + (parseInt(item.adicionales.insumos) || 0) + (parseInt(item.adicionales.logistica) || 0);
+            var finalSubtotalItem = valorUnitarioFinal * item.cantidad;
+            netoGeneral += finalSubtotalItem;
+
+
+            // Inyectamos el mini esquema geométrico directamente en la fila de cotización
+            var miniPlanoHTML = generarMiniEsquemaHTML(item);
+
+
+            return `
+                <tr>
+                    <td style="text-align:center; font-weight:bold;">0${idx + 1}</td>
+                    <td>
+                        <strong style="font-size:12px; color:#0f172a;">${item.etiqueta} — ${item.tipo}</strong><br>
+                        <span style="font-size:10px; color:var(--text-muted); line-height:1.4;">Perfil: ${item.material} / ${item.linea}<br>Acabado: ${item.acabado} | Cristal: ${item.cristal}</span>
+                    </td>
+                    <td style="text-align:center;">${miniPlanoHTML}</td>
+                    <td style="text-align:center; font-weight:700; font-size:11px; color:#334155;">${item.vano}</td>
+                    <td style="text-align:center; font-weight:700; font-size:11px;">${item.cantidad}</td>
+                    <td style="text-align:right; font-weight:800; font-size:12px; color:#0f172a;">$${finalSubtotalItem.toLocaleString('es-CL')}</td>
+                </tr>`;
+        }).join("");
+
+
+        var ivaGeneral = Math.ceil(netoGeneral * 0.19);
+        var totalGeneral = netoGeneral + ivaGeneral;
+
+
+        document.getElementById('doc-neto').innerText = "$" + netoGeneral.toLocaleString('es-CL');
+        document.getElementById('doc-iva').innerText = "$" + ivaGeneral.toLocaleString('es-CL');
+        document.getElementById('doc-total').innerText = "$" + totalGeneral.toLocaleString('es-CL') + " CLP";
+    }
+
+
+    window.onload = function() {
+        cambiarEstructuraMaterial();
+        
+        // Inicializar el proyecto con el primer elemento obligatorio (V1)
+        listadoEstructuras = [{
+            etiqueta: "V1 (Living)",
+            tipo: 'CORREDERA',
+            material: 'ALUMINIO',
+            linea: "Línea Al25 (Corredera Tradicional)",
+            acabado: "Mate",
+            cristal: "Monolítico Incoloro 6mm ($22.000/m²)",
+            vano: "1500 x 1200 mm",
+            cantidad: 1,
+            anchos: [750, 750],
+            altos: [1200],
+            aperturas: { 'f0c0': 'fijo', 'f0c1': 'movil-izq' },
+            costosBBDD: { vidrio: 0, perfiles: 0, accesorios: 0 },
+            adicionales: { insumos: 0, logistica: 0 },
+            precioVentaUnitarioBase: 0
+        }];
+        
+        cargarEstructuraSubTabEnPantalla(0);
+    };
+</script>
 </body>
-</html> 
+</html>
