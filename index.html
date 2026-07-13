@@ -1262,34 +1262,34 @@
             document.getElementById('bloque-totales-globales').style.display = "none";
             return;
         <table class="mini-tabla-insumos">
-    <thead><tr><th>Código</th><th>Descripción</th><th>Cant.</th><th>Dimensión</th><th>Valor Unit.</th><th>Subtotal</th></tr></thead>
-    <tbody>
-        <tr>
-            <td>—</td>
-            <td><strong>Cristal:</strong> ${item.cristal}</td>
-            <td>1</td>
-            <td>${((item.anchos.reduce((a,b)=>a+b,0)/1000) * (item.altos.reduce((a,b)=>a+b,0)/1000)).toFixed(2)} m²</td>
-            <td>—</td>
-            <td>$${item.costosBBDD.vidrio.toLocaleString('es-CL')}</td>
-        </tr>
-        <tr>
-            <td>—</td>
-            <td><strong>Perfilería:</strong> Marcos, hojas y junquillos</td>
-            <td>1</td>
-            <td>${(((item.anchos.reduce((a,b)=>a+b,0)*2)+(item.altos.reduce((a,b)=>a+b,0)*2))/1000).toFixed(2)} ml</td>
-            <td>—</td>
-            <td>$${item.costosBBDD.perfiles.toLocaleString('es-CL')}</td>
-        </tr>
-        <tr>
-            <td>—</td>
-            <td><strong>Herrajes:</strong> Cierres, escuadras y felpas</td>
-            <td>1</td>
-            <td>Kit Vano</td>
-            <td>—</td>
-            <td>$${item.costosBBDD.accesorios.toLocaleString('es-CL')}</td>
-        </tr>
-    </tbody>
-</table>    
+            <thead><tr><th>Código</th><th>Descripción</th><th>Cant.</th><th>Dimensión</th><th>Valor Unit.</th><th>Subtotal</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td>—</td>
+                    <td><strong>Cristal:</strong> ${item.cristal}</td>
+                    <td>1</td>
+                    <td>${((item.anchos.reduce((a,b)=>a+b,0)/1000) * (item.altos.reduce((a,b)=>a+b,0)/1000)).toFixed(2)} m²</td>
+                    <td>—</td>
+                    <td>$${item.costosBBDD.vidrio.toLocaleString('es-CL')}</td>
+                </tr>
+                <tr>
+                    <td>—</td>
+                    <td><strong>Perfilería:</strong> Marcos, hojas y junquillos</td>
+                    <td>1</td>
+                    <td>${(((item.anchos.reduce((a,b)=>a+b,0)*2)+(item.altos.reduce((a,b)=>a+b,0)*2))/1000).toFixed(2)} ml</td>
+                    <td>—</td>
+                    <td>$${item.costosBBDD.perfiles.toLocaleString('es-CL')}</td>
+                </tr>
+                <tr>
+                    <td>—</td>
+                    <td><strong>Herrajes:</strong> Cierres, escuadras y felpas</td>
+                    <td>1</td>
+                    <td>Kit Vano</td>
+                    <td>—</td>
+                    <td>$${item.costosBBDD.accesorios.toLocaleString('es-CL')}</td>
+                </tr>
+            </tbody>
+        </table>    
         }
         contenedor.innerHTML = listadoEstructuras.map((item, idx) => {
             var subtotalUnitario = item.precioVentaUnitarioBase + item.adicionales.insumos + item.adicionales.logistica;
