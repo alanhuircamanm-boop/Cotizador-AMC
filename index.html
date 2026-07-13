@@ -1304,13 +1304,34 @@
                         <div>
                             <span style="font-size:11px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:6px;">DESGLOSE DE INSUMOS TÉCNICOS (VALORES BASE VALIDADOS)</span>
                             <table class="mini-tabla-insumos">
-                                <thead><tr><th>Insumo y Especificación</th><th>Cantidad</th><th>Unidad</th><th>Costo Base BBDD</th></tr></thead>
-                                <tbody>
-                                    <tr><td><strong>Cristal Dimensionado:</strong> ${item.cristal}</td><td>1</td><td>Vano</td><td>$${item.costosBBDD.vidrio.toLocaleString('es-CL')}</td></tr>
-                                    <tr><td><strong>Extrusión Perfilería:</strong> Marcos, hojas y junquillos</td><td>1</td><td>Perímetro</td><td>$${item.costosBBDD.perfiles.toLocaleString('es-CL')}</td></tr>
-                                    <tr><td><strong>Herrajes y Rodamientos:</strong> Cierres, escuadras y felpas</td><td>1</td><td>Kit Vano</td><td>$${item.costosBBDD.accesorios.toLocaleString('es-CL')}</td></tr>
-                                </tbody>
-                            </table>
+    <thead><tr><th>Código</th><th>Descripción</th><th>Cant.</th><th>Dimensión</th><th>Valor Unit.</th><th>Subtotal</th></tr></thead>
+    <tbody>
+        <tr>
+            <td>—</td>
+            <td><strong>Cristal:</strong> ${item.cristal}</td>
+            <td>1</td>
+            <td>${((item.anchos.reduce((a,b)=>a+b,0)/1000) * (item.altos.reduce((a,b)=>a+b,0)/1000)).toFixed(2)} m²</td>
+            <td>—</td>
+            <td>$${item.costosBBDD.vidrio.toLocaleString('es-CL')}</td>
+        </tr>
+        <tr>
+            <td>—</td>
+            <td><strong>Perfilería:</strong> Marcos, hojas y junquillos</td>
+            <td>1</td>
+            <td>${(((item.anchos.reduce((a,b)=>a+b,0)*2)+(item.altos.reduce((a,b)=>a+b,0)*2))/1000).toFixed(2)} ml</td>
+            <td>—</td>
+            <td>$${item.costosBBDD.perfiles.toLocaleString('es-CL')}</td>
+        </tr>
+        <tr>
+            <td>—</td>
+            <td><strong>Herrajes:</strong> Cierres, escuadras y felpas</td>
+            <td>1</td>
+            <td>Kit Vano</td>
+            <td>—</td>
+            <td>$${item.costosBBDD.accesorios.toLocaleString('es-CL')}</td>
+        </tr>
+    </tbody>
+</table>
                             
                             <div class="bloque-adicionales">
                                 <span style="font-size:11px; font-weight:800; color:#c2410c; display:block; margin-bottom:8px;">🛠️ CARGOS ADICIONALES DE OBRA (RECALCULO EN TIEMPO REAL)</span>
