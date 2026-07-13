@@ -384,7 +384,10 @@
             margin-top: 12px;
         }
 
-
+        .hoja-carta {
+            width: 215.9mm;
+            min-height: 279.4mm;
+        }
         .panel-gran-total {
             background: #0f172a;
             color: white;
@@ -406,6 +409,14 @@
         -webkit-overflow-scrolling: touch;
         gap: 4px;
     }
+        .contenedor-impresion{
+            overflow-x: auto;
+            justify-content:flex-start;
+        }
+        .hoja-carta{
+            flex-shrink:0;
+            min-width:215.9mm;
+        }
     .tab-btn {
         flex: 0 0 auto;
         white-space: nowrap;
@@ -497,9 +508,9 @@
 
     .hoja-carta {
         width:100%;
-        min-height:auto;
+        min-width:0;
         box-shadow:none;
-        padding:10mm;
+        margin:0;
     }
 
 }
